@@ -1,17 +1,51 @@
 import React, { useState } from "react";
 import uniquId from "uniqid";
+import Todo, { Button } from "./Todo";
 
-export default function Todo() {
+export default function Todos() {
   const [todos, setTodos] = useState([]);
   const [todo, setTodo] = useState("");
   const handleAddTodo = () => {
     setTodos([{ id: uniquId(), todo, completed: false }, ...todos]);
     setTodo("");
   };
+
+  const toggleTodo = (id) => {
+    const editedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.completed = !todo.completed;
+      }
+      return todo;
+    });
+    setTodos(editedTodos);
+  };
   console.log(todos);
   return (
     <div>
       <h1>My Todos</h1>
+
+      <div style={{ margin: "2rem 0" }}>
+        <Button
+          actionText="submit"
+          onClick={() => console.log("Submit")}
+          bgColor="red"
+        />
+        <Button
+          actionText="read"
+          onClick={() => console.log("Read")}
+          bgColor="green"
+        />
+        <Button
+          actionText="next"
+          onClick={() => console.log("Next")}
+          bgColor="yellow"
+        />
+        <Button
+          actionText="back"
+          onClick={() => console.log("Back")}
+          bgColor="gray"
+        />
+      </div>
       <div
         className="input-field"
         style={{ display: "flex", flexDirection: "column", maxWidth: "20rem" }}
@@ -36,33 +70,13 @@ export default function Todo() {
 
           <ul>
             {todos.map(({ todo, completed, id }) => (
-              <div
-                style={{ display: "flex", justifyContent: "space-around" }}
+              <Todo
+                todo={todo}
+                completed={completed}
+                id={id}
                 key={id}
-              >
-                <input
-                  type="checkbox"
-                  checked={completed}
-                  value={todo}
-                  onChange={(e) => {
-                    const editedTodos = todos.map((_todo) => {
-                      if (_todo.id === id) {
-                        _todo.completed = !completed;
-                      }
-                      return _todo;
-                    });
-                    setTodos(editedTodos);
-                  }}
-                />
-
-                <li
-                  style={{
-                    textDecorationLine: `${completed ? "line-through" : ""}`,
-                  }}
-                >
-                  {todo}
-                </li>
-              </div>
+                onChange={toggleTodo}
+              />
             ))}
           </ul>
         ) : (
