@@ -3,11 +3,31 @@ import uniquId from "uniqid";
 import Todo, { Button } from "./Todo";
 
 export default function Todos() {
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState([
+    { id: uniquId(), todo: "Do something", completed: true },
+    { id: uniquId(), todo: "Run away", completed: false },
+    { id: uniquId(), todo: "Run away1", completed: false },
+    { id: uniquId(), todo: "Run away2", completed: false },
+  ]);
+
+  const [showDialog, setShowDialog] = useState(false);
+
   const [todo, setTodo] = useState("");
   const handleAddTodo = () => {
     setTodos([{ id: uniquId(), todo, completed: false }, ...todos]);
     setTodo("");
+  };
+
+  const handleUpdate = (id, updatedTodo) => {};
+
+  const handleDelete = (id) => {
+    const editedTodos = [];
+    for (let todo of todos) {
+      if (todo.id !== id) {
+        editedTodos.push(todo);
+      }
+    }
+    setTodos(editedTodos);
   };
 
   const toggleTodo = (id) => {
@@ -24,28 +44,7 @@ export default function Todos() {
     <div>
       <h1>My Todos</h1>
 
-      <div style={{ margin: "2rem 0" }}>
-        <Button
-          actionText="submit"
-          onClick={() => console.log("Submit")}
-          bgColor="red"
-        />
-        <Button
-          actionText="read"
-          onClick={() => console.log("Read")}
-          bgColor="green"
-        />
-        <Button
-          actionText="next"
-          onClick={() => console.log("Next")}
-          bgColor="yellow"
-        />
-        <Button
-          actionText="back"
-          onClick={() => console.log("Back")}
-          bgColor="gray"
-        />
-      </div>
+      {/*TODO: INPUT COMPONENT */}
       <div
         className="input-field"
         style={{ display: "flex", flexDirection: "column", maxWidth: "20rem" }}
@@ -76,6 +75,8 @@ export default function Todos() {
                 id={id}
                 key={id}
                 onChange={toggleTodo}
+                handleDelete={handleDelete}
+                showDialog={setShowDialog}
               />
             ))}
           </ul>
@@ -83,6 +84,33 @@ export default function Todos() {
           <h3>You don't have any todos</h3>
         )}
       </div>
+      {/* TODO: DIALOG BOX */}
+      {showDialog && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0,
+            backgroundColor: "gray",
+            opacity: "0.85",
+            display: "grid",
+            placeContent: "center",
+          }}
+        >
+          <form onSubmit={handleUpdate()}>
+            <h2>Edit Todo</h2>
+            <input type="text" name="" id="" />
+            <input type="submit" value="Update" />
+            <input
+              type="submit"
+              value="Close"
+              onClick={() => setShowDialog(false)}
+            />
+          </form>
+        </div>
+      )}
     </div>
   );
 }

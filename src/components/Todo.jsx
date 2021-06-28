@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function Todo(props) {
-  const { id, todo, completed, onChange } = props;
+  const { id, todo, completed, onChange, handleDelete, showDialog } = props;
   return (
-    <div style={{ display: "flex", justifyContent: "space-around" }} key={id}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-around",
+        marginTop: "1rem",
+      }}
+      key={id}
+    >
       <input
         type="checkbox"
         checked={completed}
@@ -15,13 +22,19 @@ export default function Todo(props) {
           textDecorationLine: `${completed ? "line-through" : ""}`,
         }}
       >
-        {todo}
+        Id: {id} {todo}
       </li>
+      <Button bgColor="red" onClick={() => handleDelete(id)}>
+        Delete
+      </Button>
+      <Button bgColor="green" onClick={() => showDialog(true)}>
+        Edit
+      </Button>
     </div>
   );
 }
 
-export const Button = ({ actionText, onClick, bgColor }) => (
+export const Button = ({ children, onClick, bgColor }) => (
   <button
     style={{
       marginRight: "1rem",
@@ -33,6 +46,6 @@ export const Button = ({ actionText, onClick, bgColor }) => (
     }}
     onClick={onClick}
   >
-    {actionText}
+    {children}
   </button>
 );
