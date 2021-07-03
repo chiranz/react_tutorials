@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 
 export default function Todo(props) {
-  const { id, todo, completed, onChange, handleDelete, showDialog } = props;
+  const { id, todo, completed, onChange, handleDelete, handleEdit } = props;
   return (
     <div
       style={{
@@ -27,7 +27,7 @@ export default function Todo(props) {
       <Button bgColor="red" onClick={() => handleDelete(id)}>
         Delete
       </Button>
-      <Button bgColor="green" onClick={() => showDialog(true)}>
+      <Button bgColor="green" onClick={() => handleEdit(id)}>
         Edit
       </Button>
     </div>

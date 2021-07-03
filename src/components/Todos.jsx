@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import uniquId from "uniqid";
-import Todo, { Button } from "./Todo";
+import Modal from "./Modal";
+import Todo from "./Todo";
 
 export default function Todos() {
   const [todos, setTodos] = useState([
@@ -11,11 +12,22 @@ export default function Todos() {
   ]);
 
   const [showDialog, setShowDialog] = useState(false);
+  const [editTodo, setEditTodo] = useState(null);
 
   const [todo, setTodo] = useState("");
   const handleAddTodo = () => {
     setTodos([{ id: uniquId(), todo, completed: false }, ...todos]);
     setTodo("");
+  };
+
+  const handleEdit = (id) => {
+    console.log(id);
+    todos.map((todo) => {
+      if (todo.id == id) {
+        setEditTodo(todo);
+      }
+    });
+    setShowDialog(true);
   };
 
   const handleUpdate = (id, updatedTodo) => {};
@@ -39,7 +51,7 @@ export default function Todos() {
     });
     setTodos(editedTodos);
   };
-  console.log(todos);
+
   return (
     <div>
       <h1>My Todos</h1>
@@ -76,7 +88,7 @@ export default function Todos() {
                 key={id}
                 onChange={toggleTodo}
                 handleDelete={handleDelete}
-                showDialog={setShowDialog}
+                handleEdit={handleEdit}
               />
             ))}
           </ul>
@@ -84,33 +96,12 @@ export default function Todos() {
           <h3>You don't have any todos</h3>
         )}
       </div>
-      {/* TODO: DIALOG BOX */}
-      {showDialog && (
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-            backgroundColor: "gray",
-            opacity: "0.85",
-            display: "grid",
-            placeContent: "center",
-          }}
-        >
-          <form onSubmit={handleUpdate()}>
-            <h2>Edit Todo</h2>
-            <input type="text" name="" id="" />
-            <input type="submit" value="Update" />
-            <input
-              type="submit"
-              value="Close"
-              onClick={() => setShowDialog(false)}
-            />
-          </form>
-        </div>
-      )}
+      <Modal
+        showModal={showDialog}
+        handleUpdate={handleUpdate}
+        setShowDialog={setShowDialog}
+        editTodo={editTodo}
+      />
     </div>
   );
 }
