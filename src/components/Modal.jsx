@@ -38,7 +38,12 @@ export default function Modal({
           placeContent: "center",
         }}
       >
-        <form onSubmit={handleUpdate()}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleUpdate(editTodo.id, todo);
+          }}
+        >
           <h2>Edit Todo</h2>
           <input
             type="text"

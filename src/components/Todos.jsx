@@ -20,17 +20,26 @@ export default function Todos() {
     setTodo("");
   };
 
-  const handleEdit = (id) => {
+  const handleEditClick = (id) => {
     console.log(id);
     todos.map((todo) => {
-      if (todo.id == id) {
+      if (todo.id === id) {
         setEditTodo(todo);
       }
     });
     setShowDialog(true);
   };
 
-  const handleUpdate = (id, updatedTodo) => {};
+  const handleUpdate = (id, updatedTodo) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        todo.todo = updatedTodo;
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+    setShowDialog(false);
+  };
 
   const handleDelete = (id) => {
     const editedTodos = [];
@@ -88,7 +97,7 @@ export default function Todos() {
                 key={id}
                 onChange={toggleTodo}
                 handleDelete={handleDelete}
-                handleEdit={handleEdit}
+                handleEdit={handleEditClick}
               />
             ))}
           </ul>
