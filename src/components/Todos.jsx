@@ -1,66 +1,99 @@
-import React, { useState } from "react";
-import uniquId from "uniqid";
+import React, { useState, useReducer } from "react";
+import uniqId from "uniqid";
 import Modal from "./Modal";
 import Todo from "./Todo";
 
-export default function Todos() {
-  const [todos, setTodos] = useState([
-    { id: uniquId(), todo: "Do something", completed: true },
-    { id: uniquId(), todo: "Run away", completed: false },
-    { id: uniquId(), todo: "Run away1", completed: false },
-    { id: uniquId(), todo: "Run away2", completed: false },
-  ]);
+const initialState = {
+  todos: [
+    { id: uniqId(), todo: "Do something", completed: true },
+    { id: uniqId(), todo: "Run away", completed: false },
+    { id: uniqId(), todo: "Run away1", completed: false },
+    { id: uniqId(), todo: "Run away2", completed: false },
+  ],
+  showDialog: false,
+  editTodo: null,
+};
 
-  const [showDialog, setShowDialog] = useState(false);
-  const [editTodo, setEditTodo] = useState(null);
+export const actionTypes = {
+  TOGGLE_MODAL: "TOGGLE_MODAL",
+  ADD: "ADD_TODO",
+  DELETE: "DELETE_TODO",
+  EDIT: "EDIT_TODO",
+  UPDATE: "UPDATE_TODO",
+  TOGGLE: "TOGGLE_TODO",
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case actionTypes.ADD:
+      return {
+        ...state,
+        todos: [
+          { id: uniqId(), todo: action.payload, completed: false },
+          ...state.todos,
+        ],
+      };
+
+    case actionTypes.TOGGLE:
+      // TODO: REOLVE TOGGLE TODOS
+      return {
+        ...state,
+        todos: state.todos.map((_todo) => {
+          if (_todo.id === action.payload) {
+            _todo.completed = !_todo.completed;
+          }
+          return _todo;
+        }),
+      };
+
+    case actionTypes.DELETE:
+      const editedTodos = [];
+      for (let todo of state.todos) {
+        if (todo.id !== action.payload) {
+          editedTodos.push(todo);
+        }
+      }
+      return { ...state, todos: editedTodos };
+
+    case actionTypes.EDIT:
+      let editTodo;
+      console.log(action.payload);
+      for (let todo of state.todos) {
+        console.log(todo);
+        if (todo.id == action.payload) {
+          editTodo = todo;
+        }
+      }
+      return { ...state, editTodo, showDialog: true };
+
+    case actionTypes.UPDATE:
+      console.log(action.payload);
+      const { todo, id } = action.payload;
+      console.log({ todo, id });
+      return {
+        ...state,
+        todos: state.todos.map((_todo) => {
+          if (_todo.id === id) {
+            _todo.todo = todo;
+          }
+          return _todo;
+        }),
+        showDialog: false,
+      };
+
+    case actionTypes.TOGGLE_MODAL:
+      return { ...state, showDialog: !state.showDialog };
+
+    default:
+      return state;
+  }
+};
+
+export default function Todos() {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { showDialog, editTodo, todos } = state;
 
   const [todo, setTodo] = useState("");
-  const handleAddTodo = () => {
-    setTodos([{ id: uniquId(), todo, completed: false }, ...todos]);
-    setTodo("");
-  };
-
-  const handleEditClick = (id) => {
-    console.log(id);
-    todos.map((todo) => {
-      if (todo.id === id) {
-        setEditTodo(todo);
-      }
-    });
-    setShowDialog(true);
-  };
-
-  const handleUpdate = (id, updatedTodo) => {
-    const updatedTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        todo.todo = updatedTodo;
-      }
-      return todo;
-    });
-    setTodos(updatedTodos);
-    setShowDialog(false);
-  };
-
-  const handleDelete = (id) => {
-    const editedTodos = [];
-    for (let todo of todos) {
-      if (todo.id !== id) {
-        editedTodos.push(todo);
-      }
-    }
-    setTodos(editedTodos);
-  };
-
-  const toggleTodo = (id) => {
-    const editedTodos = todos.map((todo) => {
-      if (todo.id === id) {
-        todo.completed = !todo.completed;
-      }
-      return todo;
-    });
-    setTodos(editedTodos);
-  };
-
   return (
     <div>
       <h1>My Todos</h1>
@@ -79,7 +112,10 @@ export default function Todos() {
           onChange={(e) => setTodo(e.target.value)}
         />
 
-        <button onClick={handleAddTodo} style={{ marginTop: 20 }}>
+        <button
+          onClick={() => dispatch({ type: actionTypes.ADD, payload: todo })}
+          style={{ marginTop: 20 }}
+        >
           Add Todo
         </button>
       </div>
@@ -95,9 +131,7 @@ export default function Todos() {
                 completed={completed}
                 id={id}
                 key={id}
-                onChange={toggleTodo}
-                handleDelete={handleDelete}
-                handleEdit={handleEditClick}
+                dispatch={dispatch}
               />
             ))}
           </ul>
@@ -105,12 +139,7 @@ export default function Todos() {
           <h3>You don't have any todos</h3>
         )}
       </div>
-      <Modal
-        showModal={showDialog}
-        handleUpdate={handleUpdate}
-        setShowDialog={setShowDialog}
-        editTodo={editTodo}
-      />
+      <Modal showModal={showDialog} editTodo={editTodo} dispatch={dispatch} />
     </div>
   );
 }

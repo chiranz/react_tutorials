@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { actionTypes } from "./Todos";
 
-export default function Modal({
-  editTodo,
-  showModal,
-  handleUpdate,
-  setShowDialog,
-}) {
+export default function Modal({ editTodo, showModal, dispatch }) {
   const [todo, setTodo] = useState("");
   //   COMPONENTDIDMOUNT
   useEffect(() => {
@@ -19,7 +15,6 @@ export default function Modal({
 
   //   COMPONENT DID UPDATE
   useEffect(() => {
-    console.log("Called");
     editTodo ? setTodo(editTodo.todo) : setTodo("");
   }, [editTodo]);
 
@@ -38,12 +33,7 @@ export default function Modal({
           placeContent: "center",
         }}
       >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleUpdate(editTodo.id, todo);
-          }}
-        >
+        <div>
           <h2>Edit Todo</h2>
           <input
             type="text"
@@ -52,13 +42,22 @@ export default function Modal({
             value={todo}
             onChange={(e) => setTodo(e.target.value)}
           />
-          <input type="submit" value="Update" />
+          <button
+            onClick={() =>
+              dispatch({
+                type: actionTypes.UPDATE,
+                payload: { id: editTodo.id, todo },
+              })
+            }
+          >
+            Update
+          </button>
           <input
             type="submit"
             value="Close"
-            onClick={() => setShowDialog(false)}
+            onClick={() => dispatch({ type: actionTypes.TOGGLE_MODAL })}
           />
-        </form>
+        </div>
       </div>
     );
   }

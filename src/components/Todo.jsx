@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { actionTypes } from "./Todos";
 
 export default function Todo(props) {
-  const { id, todo, completed, onChange, handleDelete, handleEdit } = props;
+  const { id, todo, completed, dispatch } = props;
+
   return (
     <div
       style={{
@@ -14,7 +16,7 @@ export default function Todo(props) {
       <input
         type="checkbox"
         checked={completed}
-        onChange={() => onChange(id)}
+        onChange={() => dispatch({ type: actionTypes.TOGGLE, payload: id })}
       />
 
       <li
@@ -24,10 +26,16 @@ export default function Todo(props) {
       >
         Id: {id} {todo}
       </li>
-      <Button bgColor="red" onClick={() => handleDelete(id)}>
+      <Button
+        bgColor="red"
+        onClick={() => dispatch({ payload: id, type: actionTypes.DELETE })}
+      >
         Delete
       </Button>
-      <Button bgColor="green" onClick={() => handleEdit(id)}>
+      <Button
+        bgColor="green"
+        onClick={() => dispatch({ type: actionTypes.EDIT, payload: id })}
+      >
         Edit
       </Button>
     </div>
