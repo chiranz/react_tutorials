@@ -1,34 +1,48 @@
-class Person {
-  name = null;
-  height = null;
-  weight = null;
-  constructor(name, height, weight) {
+// USER AS A FUNCTION
+function User({ name, age, gender }) {
+  this.name = name;
+  this.age = age;
+  this.gender = gender;
+}
+
+User.prototype.getName = function () {
+  return `Your name is ${this.name}`;
+};
+
+User.prototype.setName = function (name) {
+  this.name = name;
+};
+
+const Anmol = new User({ name: "Anmol", age: 20, gender: "Male" });
+
+console.log(Anmol.name);
+console.log(Anmol.age);
+
+Anmol.setName("Anmollll");
+
+console.log(Anmol.name);
+
+// AS A CLASS
+class ClassUser {
+  constructor({ name, age, gender }) {
     this.name = name;
-    this.weight = weight;
-    this.height = height;
+    this.age = age;
+    this.gender = gender;
   }
-  position = [0, 0];
-
-  setName(_name) {
-    this.name = _name;
-  }
-}
-
-class Attacker extends Person {
-  life = 100;
-  weapon = "AK47";
-
-  constructor(name, height, weight) {
-    super(name, height, weight);
+  getName() {
+    return `Your name is ${this.name}`;
   }
 
-  pickWeapon(_weapon) {
-    this.weapon = _weapon;
+  setName(name) {
+    this.name = name;
   }
 }
 
-const nisal = new Attacker("nisal", 157, 50);
+const jack = new ClassUser({ name: "Jack", age: 10, gender: "Male" });
 
-console.log(nisal.name);
+console.log(jack.name);
+console.log(jack.age);
 
-console.log(nisal.height);
+jack.setName("jackkkk");
+
+console.log(jack.name);
