@@ -1,5 +1,6 @@
 import React, { useState, useReducer } from "react";
 import uniqId from "uniqid";
+import MessageBox from "./MessageBox";
 import Modal from "./Modal";
 import Todo from "./Todo";
 
@@ -12,6 +13,7 @@ const initialState = {
   ],
   showDialog: false,
   editTodo: null,
+  infoMessage: null,
 };
 
 export const actionTypes = {
@@ -21,17 +23,20 @@ export const actionTypes = {
   EDIT: "EDIT_TODO",
   UPDATE: "UPDATE_TODO",
   TOGGLE: "TOGGLE_TODO",
+  CLEAR_INFO: "CLEAR_INFO",
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
     case actionTypes.ADD:
+      const newId = uniqId();
       return {
         ...state,
         todos: [
-          { id: uniqId(), todo: action.payload, completed: false },
+          { id: newId, todo: action.payload, completed: false },
           ...state.todos,
         ],
+        infoMessage: `Todo ${newId} added successfully`,
       };
 
     case actionTypes.TOGGLE:
@@ -53,7 +58,12 @@ const reducer = (state, action) => {
           editedTodos.push(todo);
         }
       }
-      return { ...state, todos: editedTodos };
+      return {
+        ...state,
+        todos: editedTodos,
+
+        infoMessage: `Todo ${action.payload} deleted successfully`,
+      };
 
     case actionTypes.EDIT:
       let editTodo;
@@ -79,10 +89,13 @@ const reducer = (state, action) => {
           return _todo;
         }),
         showDialog: false,
+        infoMessage: `Todo ${id} updated successfully`,
       };
 
     case actionTypes.TOGGLE_MODAL:
       return { ...state, showDialog: !state.showDialog };
+    case actionTypes.CLEAR_INFO:
+      return { ...state, infoMessage: null };
 
     default:
       return state;
@@ -91,11 +104,12 @@ const reducer = (state, action) => {
 
 export default function Todos() {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { showDialog, editTodo, todos } = state;
+  const { showDialog, editTodo, todos, infoMessage } = state;
 
   const [todo, setTodo] = useState("");
   return (
     <div>
+      <MessageBox message={infoMessage} dispatch={dispatch} />
       <h1>My Todos</h1>
 
       {/*TODO: INPUT COMPONENT */}
