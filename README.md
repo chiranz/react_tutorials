@@ -13,6 +13,10 @@
 - useReducer to manage state
 - useContext if we need it
 
+## USEFUL LINKS
+
+- [Dan Abramov on react hooks](https://www.youtube.com/watch?v=dpw9EHDh2bM&ab_channel=ReactConf)
+
 ## Topics to discuss
 
 - this keyword in functions

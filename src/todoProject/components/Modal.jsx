@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { actionTypes } from "./Todos";
+import { actionTypes } from "../Todos";
 
 export default function Modal({ editTodo, showModal, dispatch }) {
   const [todo, setTodo] = useState("");

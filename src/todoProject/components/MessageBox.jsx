@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { actionTypes } from "./Todos";
+import { actionTypes } from "../Todos";
 
 export default function MessageBox({ message, dispatch, type = "success" }) {
   const color = type === "success" ? "green" : type === "fail" ? "red" : "";

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { actionTypes } from "./Todos";
+import { actionTypes } from "../Todos";
 
 export default function Todo(props) {
   const { id, todo, completed, dispatch } = props;

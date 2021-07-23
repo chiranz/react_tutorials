@@ -1,8 +1,8 @@
 import React, { useState, useReducer } from "react";
 import uniqId from "uniqid";
-import MessageBox from "./MessageBox";
-import Modal from "./Modal";
-import Todo from "./Todo";
+import MessageBox from "./components/MessageBox";
+import Modal from "./components/Modal";
+import Todo from "./components/Todo";
 
 const initialState = {
   todos: [

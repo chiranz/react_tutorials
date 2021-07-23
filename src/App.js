@@ -1,12 +1,12 @@
 import React from "react";
-import Todos from "./components/Todos";
+import ReactRouting from "./ReactRouting";
 
 import "./styles/App.css";
 
 function App() {
   return (
-    <div className="App">
-      <Todos />
+    <div className="App" style={{ maxWidth: "900px", margin: "0 auto" }}>
+      <ReactRouting />
     </div>
   );
 }
