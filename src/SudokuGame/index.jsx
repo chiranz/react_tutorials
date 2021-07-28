@@ -3,16 +3,30 @@ import sudoku from "sudoku";
 import "./sudoku.css";
 import InputField from "./components/InputField";
 
+window.sudoku = sudoku;
+window.react = React;
+
 const getFormattedPuzzle = () => {
   // CONSTRAINS= puzzle length = 81
-  const _puzzle = sudoku.makepuzzle();
-  const puzzle = _puzzle.map((p) => (p === null ? p : p + 1));
-  const puzzle_2d = [];
+  const formattedPuzzle = sudoku
+    .makepuzzle()
+    .map((p) => (p === null ? p : p + 1));
+  const rows = [];
   for (let i = 0; i < 9; i++) {
-    const currentIndex = i * 9;
-    puzzle_2d.push(puzzle.slice(currentIndex, currentIndex + 9));
+    let row = { cols: [], index: i };
+    for (let j = 0; j < 9; j++) {
+      const value = formattedPuzzle[i * 9 + j];
+      const col = {
+        i: i,
+        j: j,
+        value,
+        readOnly: value ? true : false,
+      };
+      row.cols.push(col);
+    }
+    rows.push(row);
   }
-  return puzzle_2d;
+  return rows;
 };
 export default function Index() {
   const [puzzle, setPuzzle] = React.useState(null);
@@ -27,18 +41,19 @@ export default function Index() {
       window.localStorage.setItem("sudoku_puzzle", JSON.stringify(_puzzle));
     }
   }, []);
-  const changeValue = (index, value) => {
-    // 26 i = 2 j = 8
-    let i = Math.floor(index / 9);
-    let j = index % 9;
 
+  const changeValue = ({ i, j, value, readOnly }) => {
+    const cols = puzzle[i].cols;
     setPuzzle([
       ...puzzle.slice(0, i),
-      [
-        ...puzzle[i].slice(0, j),
-        parseInt(value),
-        ...puzzle[i].slice(j + 1, puzzle[i].length),
-      ],
+      {
+        index: i,
+        cols: [
+          ...cols.slice(0, j),
+          { i, j, value, readOnly },
+          ...cols.slice(j + 1),
+        ],
+      },
       ...puzzle.slice(i + 1, puzzle.length),
     ]);
   };
@@ -48,16 +63,11 @@ export default function Index() {
       <h1>Sudoku Game</h1>
       <div style={{ maxWidth: 30 * 9 }}>
         {puzzle &&
-          puzzle.map((row, i) => {
-            return row.map((val, j) => {
-              const index = i * 9 + j;
+          puzzle.map((row) => {
+            return row.cols.map((col) => {
+              const index = col.i * 9 + col.j;
               return (
-                <InputField
-                  key={index}
-                  value={val}
-                  index={index}
-                  changeValue={changeValue}
-                />
+                <InputField key={index} data={col} changeValue={changeValue} />
               );
             });
           })}

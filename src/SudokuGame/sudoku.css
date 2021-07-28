@@ -1,5 +1,9 @@
 .input_field {
   height: 30px;
   width: 30px;
-  border: 2px solid grey;
+  outline: 2px solid grey;
+}
+
+.input_field:read-only {
+  cursor: not-allowed;
 }

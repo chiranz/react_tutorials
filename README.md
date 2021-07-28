@@ -14,6 +14,7 @@
 - useContext if we need it
 
 ## USEFUL LINKS
+- [KENT C. DODDS REACT COURSE egghead.io](https://egghead.io/courses/the-beginner-s-guide-to-react)
 
 - [Dan Abramov on react hooks](https://www.youtube.com/watch?v=dpw9EHDh2bM&ab_channel=ReactConf)
 
