@@ -3,19 +3,20 @@ import sudoku from "sudoku";
 import "./sudoku.css";
 import InputField from "./components/InputField";
 
-window.sudoku = sudoku;
-window.react = React;
+const getFlatArrayFromPuzzle = (puzzle) => {
+  return puzzle
+    .map((row) =>
+      row.cols.map((col) => (col.value === null ? null : col.value - 1))
+    )
+    .flat();
+};
 
-const getFormattedPuzzle = () => {
-  // CONSTRAINS= puzzle length = 81
-  const formattedPuzzle = sudoku
-    .makepuzzle()
-    .map((p) => (p === null ? p : p + 1));
+const formatPuzzle = (puzzle) => {
   const rows = [];
   for (let i = 0; i < 9; i++) {
     let row = { cols: [], index: i };
     for (let j = 0; j < 9; j++) {
-      const value = formattedPuzzle[i * 9 + j];
+      const value = puzzle[i * 9 + j];
       const col = {
         i: i,
         j: j,
@@ -28,6 +29,15 @@ const getFormattedPuzzle = () => {
   }
   return rows;
 };
+
+const getFormattedPuzzle = () => {
+  // CONSTRAINS= puzzle length = 81
+  const formattedPuzzle = sudoku
+    .makepuzzle()
+    .map((p) => (p === null ? p : p + 1));
+  return formatPuzzle(formattedPuzzle);
+};
+
 export default function Index() {
   const [puzzle, setPuzzle] = React.useState(null);
 
@@ -57,6 +67,14 @@ export default function Index() {
       ...puzzle.slice(i + 1, puzzle.length),
     ]);
   };
+  const solveMagically = () => {
+    console.log("God is solving sudoku!");
+    const rawPuzzle = getFlatArrayFromPuzzle(puzzle);
+    let solvedPuzzle = sudoku.solvepuzzle(rawPuzzle);
+    solvedPuzzle = solvedPuzzle.map((item) => item + 1);
+    solvedPuzzle = formatPuzzle(solvedPuzzle);
+    setPuzzle(solvedPuzzle);
+  };
   console.log(puzzle);
   return (
     <div>
@@ -72,6 +90,9 @@ export default function Index() {
             });
           })}
       </div>
+      <button className="mt-2" onClick={solveMagically}>
+        Solve it magically
+      </button>
     </div>
   );
 }

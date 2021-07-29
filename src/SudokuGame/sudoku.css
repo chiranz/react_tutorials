@@ -7,3 +7,6 @@
 .input_field:read-only {
   cursor: not-allowed;
 }
+.mt-2 {
+  margin-top: 2rem;
+}
