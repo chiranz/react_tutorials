@@ -3,7 +3,15 @@ import sudoku from "sudoku";
 import "./sudoku.css";
 import InputField from "./components/InputField";
 
-const getFlatArrayFromPuzzle = (puzzle) => {
+const getFlatArrayFromPuzzle = (puzzle, readOnly = false) => {
+  if (readOnly) {
+    return puzzle
+      .map((row) =>
+        row.cols.map((col) => (col.readOnly ? col.value - 1 : null))
+      )
+      .flat();
+  }
+
   return puzzle
     .map((row) =>
       row.cols.map((col) => (col.value === null ? null : col.value - 1))
@@ -69,7 +77,7 @@ export default function Index() {
   };
   const solveMagically = () => {
     console.log("God is solving sudoku!");
-    const rawPuzzle = getFlatArrayFromPuzzle(puzzle);
+    const rawPuzzle = getFlatArrayFromPuzzle(puzzle, true);
     let solvedPuzzle = sudoku.solvepuzzle(rawPuzzle);
     solvedPuzzle = solvedPuzzle.map((item) => item + 1);
     solvedPuzzle = formatPuzzle(solvedPuzzle);
