@@ -15,3 +15,14 @@ code {
 * {
   box-sizing: border-box;
 }
+
+.card {
+  border: 1px solid gainsboro;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+.inputfield {
+  margin-bottom: 1rem;
+}
