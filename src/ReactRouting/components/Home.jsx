@@ -2,17 +2,13 @@ import React from "react";
 import Blog from "./Blog";
 import { UserContext } from "../context/UserContext";
 import CreateBlog from "./CreateBlog";
+import { actionTypes, BlogContext } from "../context/BlogContext";
 
 export default function Home() {
-  const [blogs, setBlogs] = React.useState([
-    {
-      heading: "Blog Heading",
-      content: "This is my blog content.",
-    },
-  ]);
   const { user } = React.useContext(UserContext);
+  const { blogs, dispatch } = React.useContext(BlogContext);
   const handleCreate = (blog) => {
-    setBlogs([blog, ...blogs]);
+    dispatch({ type: actionTypes.add, payload: blog });
   };
   return (
     <div>
