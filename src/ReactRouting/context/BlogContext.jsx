@@ -2,6 +2,8 @@ import React from "react";
 
 export const BlogContext = React.createContext({ blogs: [] });
 
+// blog = {heading, content, author}
+
 // action = {type: "ADD_POST", payload: data}
 
 export const actionTypes = {
@@ -15,8 +17,13 @@ export const BlogProvider = ({ children }) => {
     (state, action) => {
       switch (action.type) {
         // Handle create
+        // Payload should send blog with author
         case actionTypes.add:
-          return [action.payload, ...state];
+          return [{ ...action.payload, id: state.length + 1 }, ...state];
+
+        // Payload should send ID
+        case actionTypes.delete:
+          return [...state.filter((blog) => blog.id !== action.payload)];
 
         default:
           return state;
@@ -27,19 +34,19 @@ export const BlogProvider = ({ children }) => {
         id: 1,
         heading: "This is heading",
         content: "this is content",
-        author: "Someone ",
+        author: "Ram",
       },
       {
         id: 2,
         heading: "This is heading",
         content: "this is content",
-        author: "Someone ",
+        author: "Vivek",
       },
       {
         id: 3,
         heading: "This is heading",
         content: "this is content",
-        author: "Someone ",
+        author: "Gandhi",
       },
     ]
   );
