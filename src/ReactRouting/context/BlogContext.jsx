@@ -32,7 +32,7 @@ const initialState = {
       author: "Gandhi",
     },
   ],
-  editTodo: null,
+  blogToEdit: null,
 };
 const reducer = (state, action) => {
   switch (action.type) {
@@ -56,8 +56,7 @@ const reducer = (state, action) => {
     case actionTypes.edit:
       // Todo: Set blog to edit
       const blogToEdit = state.blogs.find((blog) => blog.id === action.payload);
-
-      console.log(action.payload);
+      return { ...state, blogToEdit };
 
     default:
       return state;
