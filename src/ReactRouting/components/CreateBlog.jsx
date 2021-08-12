@@ -1,7 +1,10 @@
 import React from "react";
 import { UserContext } from "../context/UserContext";
 
-export default function CreateBlog({ handleCreate }) {
+export default function CreateBlog({
+  handleCreate,
+  actionText = "create blog",
+}) {
   const { user } = React.useContext(UserContext);
   const [blog, setBlog] = React.useState({ heading: "", content: "" });
   const handleChange = (e) => {
