@@ -1,0 +1,15 @@
+.outer_div {
+  min-height: 10rem;
+  min-width: 10rem;
+  margin-top: 5rem;
+  cursor: pointer;
+  position: relative;
+  border: 1px solid bisque;
+}
+
+.title {
+  background: chocolate;
+  color: white;
+  padding: 0.17rem 0.5rem;
+  position: absolute;
+}

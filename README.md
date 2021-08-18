@@ -18,6 +18,7 @@
 
 - [Dan Abramov on react hooks](https://www.youtube.com/watch?v=dpw9EHDh2bM&ab_channel=ReactConf)
 
+- [UI DESIGN TECHNIQUES] - (https://user-interface.io/how-to-design-almost-any-ui-element/)
 ## Topics to discuss
 
 - this keyword in functions
